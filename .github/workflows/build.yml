@@ -158,11 +158,17 @@ jobs:
            defines: '-DLLAMA_AVX2=OFF'
          - build: 'avx512'
            defines: '-DLLAMA_AVX512=ON -DBUILD_SHARED_LIBS=ON'
+         - build: 'openblas'
+           defines: '-DLLAMA_OPENBLAS=ON'
 
     steps:
       - name: Clone
         id: checkout
         uses: actions/checkout@v1
+
+      - name: Install OpenBLAS
+        if: ${{ matrix.build == 'openblas' }}
+        run: vcpkg install openblas:x64-windows
 
       - name: Build
         id: cmake_build
